@@ -11,6 +11,7 @@ const SUPPORTED_EVENT_TYPES = [
     'update-location',
     // Transcription
     'new-utterance',
+    'new-utterance-chunks',
     // Todos
     'todo-created',
     'todo-updated',
@@ -426,6 +427,16 @@ function formatEvent(
             const convUuid = data["conversation_uuid"] ?? "";
             return `[${speaker}] "${text}"${convUuid ? ` ${dimText(`conv=${convUuid}`)}` : ""}`;
         }
+        case "new-utterance-chunks": {
+            const chunks = (data["chunks"] as Record<string, unknown>[] | undefined) ?? [];
+            let result = `conv=${data["conversation_id"] ?? "?"}`;
+            for (const chunk of chunks) {
+                const tags = (chunk["tags"] as string[] | undefined) ?? [];
+                const text = truncate(String(chunk["chunk_text"] ?? ""), 100);
+                result += `\n    ${dimText(`[${tags.join(", ")}]`)} "${text}"`;
+            }
+            return result;
+        }
         case "new-conversation": {
             const conv = data["conversation"] as Record<string, unknown> | undefined;
             const id = conv?.["id"] ?? "?";
@@ -568,6 +579,7 @@ function green(text: string): string {
 function colored(eventType: string): string {
     const colors: Record<string, string> = {
         "new-utterance": "\x1b[36m",      // cyan
+        "new-utterance-chunks": "\x1b[36m",
         "new-conversation": "\x1b[32m",   // green
         "update-conversation": "\x1b[33m", // yellow
         "update-conversation-summary": "\x1b[33m",
