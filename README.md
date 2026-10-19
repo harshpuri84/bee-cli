@@ -265,6 +265,26 @@ Payload:
 }
 ```
 
+### new-utterance-chunks
+
+Transcript chunks with their tags. Printed as one line per chunk.
+
+Payload:
+```json
+{
+  "conversation_id": 123,
+  "transcription_id": 456,
+  "chunks": [
+    {
+      "id": 1,
+      "chunk_text": "Chunk text",
+      "tags": ["CONVERSATION"],
+      "utterances": [1, 2]
+    }
+  ]
+}
+```
+
 ### new-conversation
 
 Conversation created.
