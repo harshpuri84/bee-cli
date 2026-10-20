@@ -265,6 +265,27 @@ Payload:
 }
 ```
 
+### new-utterance-chunks
+
+Transcript chunks with their tags. `bee stream` prints one line per chunk as
+`[tag1, tag2] chunk text`.
+
+Payload:
+```json
+{
+  "conversation_id": 123,
+  "transcription_id": 456,
+  "chunks": [
+    {
+      "id": 1,
+      "chunk_text": "Chunk text",
+      "tags": ["CONVERSATION"],
+      "utterances": [1, 2]
+    }
+  ]
+}
+```
+
 ### new-conversation
 
 Conversation created.
